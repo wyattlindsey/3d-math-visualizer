@@ -1,66 +1,50 @@
-import React from 'react';
-import { Line, Text } from '@react-three/drei';
+import React, { useState, useEffect, useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
-
-interface VectorProps {
-  vector: THREE.Vector3;
-  color: string;
-  label: string;
-  additionalInfo: string;
-}
-
-const Vector: React.FC<VectorProps> = ({
-  vector,
-  color,
-  label,
-  additionalInfo,
-}) => {
-  return (
-    <>
-      <Line
-        points={[[0, 0, 0], vector.toArray() as [number, number, number]]}
-        color={color}
-        lineWidth={2}
-      />
-      <Text
-        position={vector.clone().multiplyScalar(1.2).toArray()}
-        color={color}
-        fontSize={0.2}
-        anchorX="center"
-        anchorY="middle"
-      >
-        {label} ({additionalInfo})
-      </Text>
-    </>
-  );
-};
-
-const formatNumber = (num: number) =>
-  num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+import Vector from './Vector';
 
 const DotProductVisualizer: React.FC = () => {
-  const vecA = new THREE.Vector3(1, 2, 3);
-  const vecB = new THREE.Vector3(4, 5, 6);
+  const [vecA, setVecA] = useState(new THREE.Vector3(1, 2, 3));
+  const [vecB, setVecB] = useState(new THREE.Vector3(4, 5, 6));
+  const [isDraggingEnabled, setIsDraggingEnabled] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey) {
+        setIsDraggingEnabled(true);
+      }
+    };
+
+    const handleKeyUp = () => {
+      setIsDraggingEnabled(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   return (
-    <>
+    <Canvas>
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
       <Vector
         vector={vecA}
         color="orange"
-        label="Vector A"
-        additionalInfo={`${formatNumber(vecA.x)}, ${formatNumber(
-          vecA.y
-        )}, ${formatNumber(vecA.z)}`}
+        onDrag={setVecA}
+        isDraggingEnabled={isDraggingEnabled}
       />
       <Vector
         vector={vecB}
         color="purple"
-        label="Vector B"
-        additionalInfo={`${formatNumber(vecB.x)}, ${formatNumber(
-          vecB.y
-        )}, ${formatNumber(vecB.z)}`}
+        onDrag={setVecB}
+        isDraggingEnabled={isDraggingEnabled}
       />
-    </>
+    </Canvas>
   );
 };
 
