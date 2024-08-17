@@ -1,25 +1,29 @@
 import React, { useRef } from 'react';
-import { ThreeEvent, useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { Line, Text } from '@react-three/drei';
+import DraggableHandle from './DraggableHandle';
 
 interface VectorProps {
   vector: THREE.Vector3;
   color: string;
-  onDrag: (newVector: THREE.Vector3) => void;
-  isDraggingEnabled: boolean;
+  label: string;
+  additionalInfo: string;
+  onDrag?: (newVector: THREE.Vector3) => void;
+  isDraggingEnabled?: boolean;
 }
 
 const Vector: React.FC<VectorProps> = ({
   vector,
   color,
-  onDrag,
-  isDraggingEnabled,
+  label,
+  additionalInfo,
+  onDrag = () => {},
+  isDraggingEnabled = true,
 }) => {
-  const lineRef =
-    useRef<THREE.Line<THREE.BufferGeometry, THREE.Material | THREE.Material[]>>(
-      null
-    );
+  const lineRef = useRef<THREE.Line>(null);
 
+  // Update the position of the line's endpoint dynamically
   useFrame(() => {
     if (lineRef.current) {
       const positions = lineRef.current.geometry.attributes.position
@@ -33,17 +37,21 @@ const Vector: React.FC<VectorProps> = ({
 
   return (
     <>
-      <line>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes.position"
-            array={new Float32Array([0, 0, 0, vector.x, vector.y, vector.z])}
-            count={2}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial attach="material" color={color} linewidth={2} />
-      </line>
+      <Line
+        // ref={lineRef}
+        points={[[0, 0, 0], vector.toArray() as [number, number, number]]}
+        color={color}
+        lineWidth={2}
+      />
+      <Text
+        position={vector.clone().multiplyScalar(1.2).toArray()}
+        color={color}
+        fontSize={0.2}
+        anchorX="center"
+        anchorY="middle"
+      >
+        {label} ({additionalInfo})
+      </Text>
       <DraggableHandle
         vector={vector}
         color={color}
@@ -51,62 +59,6 @@ const Vector: React.FC<VectorProps> = ({
         isDraggingEnabled={isDraggingEnabled}
       />
     </>
-  );
-};
-
-interface VectorProps {
-  vector: THREE.Vector3;
-  color: string;
-  onDrag: (newVector: THREE.Vector3) => void;
-  isDraggingEnabled: boolean;
-}
-
-const DraggableHandle: React.FC<VectorProps> = ({
-  vector,
-  color,
-  onDrag,
-  isDraggingEnabled,
-}) => {
-  const handleRef = useRef<THREE.Mesh>(null);
-  const { size, viewport } = useThree();
-  const aspect = size.width / viewport.width;
-
-  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-    if (!isDraggingEnabled) return;
-    event.stopPropagation();
-    const domElement = event.target as HTMLElement;
-    domElement.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    if (!isDraggingEnabled || !handleRef.current) return;
-    const { x, y } = event.unprojectedPoint;
-    const newVector = new THREE.Vector3(
-      (x * viewport.width) / aspect,
-      -(y * viewport.height) / aspect,
-      vector.z
-    );
-    onDrag(newVector);
-  };
-
-  const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
-    if (!isDraggingEnabled) return;
-    event.stopPropagation();
-    const domElement = event.target as HTMLElement;
-    domElement.releasePointerCapture(event.pointerId);
-  };
-
-  return (
-    <mesh
-      ref={handleRef}
-      position={vector.toArray()}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-    >
-      <boxGeometry args={[0.2, 0.2, 0.2]} />
-      <meshBasicMaterial color={color} />
-    </mesh>
   );
 };
 

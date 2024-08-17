@@ -19,6 +19,8 @@ const Scene: React.FC = () => {
             <OrbitControls />
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 5]} intensity={1} />
+
+            {/* First Visualizer */}
             <Line
               points={[
                 [0, 0, 0],
@@ -46,12 +48,15 @@ const Scene: React.FC = () => {
             <DotProductVisualizer />
           </Canvas>
         </VisualizationContainer>
+
         <VisualizationContainer>
           <Canvas>
             <PerspectiveCamera makeDefault position={[5, 5, 5]} />
             <OrbitControls />
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 5]} intensity={1} />
+
+            {/* Second Visualizer */}
             <Line
               points={[
                 [0, 0, 0],
