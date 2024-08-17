@@ -1,66 +1,54 @@
-import React, { useState, useRef } from 'react';
-import { ThreeEvent, useThree } from '@react-three/fiber';
+import React, { useState, useRef, useContext } from 'react';
+import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGesture } from '@use-gesture/react';
+import { PlaneContext } from './PlaneContext'; // Adjust the import path accordingly
 
 interface VectorProps {
   vector: THREE.Vector3;
   color: string;
   onDrag: (newVector: THREE.Vector3) => void;
-  isDraggingEnabled: boolean;
-  setControlsDisabled?: (disabled: boolean) => void;
+  setControlsDisabled: (disabled: boolean) => void;
 }
 
 const DraggableHandle: React.FC<VectorProps> = ({
   vector,
   color,
   onDrag,
-  isDraggingEnabled,
-  setControlsDisabled = () => {},
+  setControlsDisabled,
 }) => {
-  const { raycaster, camera, gl } = useThree();
-  const [boxPosition, setBoxPosition] = useState(vector.clone());
-  const handleRef = useRef<THREE.Mesh>(null);
+  const { raycaster } = useThree();
+  const planeRef = useContext(PlaneContext);
+  const [boxPosition, setBoxPosition] = useState(vector);
 
   const bind = useGesture(
     {
-      onDrag: ({ event }) => {
-        event.stopPropagation();
-        if (!isDraggingEnabled || !handleRef.current) return;
-
-        // Cast a ray from the camera to the mouse pointer to find the intersection point with the dragging plane
-        const intersects = raycaster.intersectObject(handleRef.current);
-        if (intersects.length > 0) {
-          const intersectionPoint = intersects[0].point;
-          setBoxPosition(intersectionPoint);
-          onDrag(intersectionPoint.clone());
-        }
+      onDrag: () => {
         setControlsDisabled(true);
+        if (!planeRef) return;
+
+        const intersects = raycaster.intersectObject(planeRef);
+        if (intersects.length > 0) {
+          const intersection = intersects[0];
+          const newPosition = new THREE.Vector3(
+            intersection.point.x,
+            intersection.point.y,
+            intersection.point.z
+          );
+          setBoxPosition(newPosition);
+          onDrag(newPosition);
+        }
       },
       onDragEnd: () => {
         setControlsDisabled(false);
       },
     },
-    { enabled: isDraggingEnabled }
+    { enabled: true }
   );
 
-  const gestureHandlers = bind();
-
-  // onClick handler with the correct event type
-  const handleClick = (event: ThreeEvent<MouseEvent>) => {
-    event.stopPropagation();
-    console.log('Box clicked:', event);
-  };
-
   return (
-    <mesh
-      ref={handleRef}
-      position={boxPosition.toArray()}
-      onClick={handleClick}
-      //   onPointerDown={gestureHandlers.onPointerDown}
-      //   onPointerMove={gestureHandlers.onPointerMove}
-      //   onPointerUp={gestureHandlers.onPointerUp}
-    >
+    //@ts-ignore Ignores type error on next line
+    <mesh {...bind()} position={boxPosition.toArray()}>
       <boxGeometry args={[0.2, 0.2, 0.2]} />
       <meshBasicMaterial color={color} />
     </mesh>

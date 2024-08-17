@@ -11,6 +11,7 @@ interface VectorProps {
   additionalInfo: string;
   onDrag?: (newVector: THREE.Vector3) => void;
   isDraggingEnabled?: boolean;
+  setControlsDisabled?: (disabled: boolean) => void;
 }
 
 const Vector: React.FC<VectorProps> = ({
@@ -20,6 +21,7 @@ const Vector: React.FC<VectorProps> = ({
   additionalInfo,
   onDrag = () => {},
   isDraggingEnabled = true,
+  setControlsDisabled = () => {},
 }) => {
   const lineRef = useRef<THREE.Line>(null);
 
@@ -34,6 +36,11 @@ const Vector: React.FC<VectorProps> = ({
       lineRef.current.geometry.attributes.position.needsUpdate = true;
     }
   });
+
+  const handleDrag = (newPosition: THREE.Vector3) => {
+    vector.copy(newPosition);
+    onDrag(newPosition);
+  };
 
   return (
     <>
@@ -55,8 +62,8 @@ const Vector: React.FC<VectorProps> = ({
       <DraggableHandle
         vector={vector}
         color={color}
-        onDrag={onDrag}
-        isDraggingEnabled={isDraggingEnabled}
+        onDrag={handleDrag}
+        setControlsDisabled={setControlsDisabled}
       />
     </>
   );

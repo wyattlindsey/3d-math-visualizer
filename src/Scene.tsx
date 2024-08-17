@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Line } from '@react-three/drei';
 import DotProductVisualizer from './DotProductVisualizer';
@@ -8,15 +8,18 @@ import {
   SceneWrapper,
   VisualizationContainer,
 } from './AppContainer';
+import { PlaneProvider } from './PlaneContext';
 
 const Scene: React.FC = () => {
+  const [controlsDisabled, setControlsDisabled] = useState(false);
+
   return (
     <AppContainer>
       <SceneWrapper>
         <VisualizationContainer>
           <Canvas>
             <PerspectiveCamera makeDefault position={[5, 5, 5]} />
-            <OrbitControls />
+            <OrbitControls enabled={!controlsDisabled} />
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 5]} intensity={1} />
 
@@ -45,14 +48,16 @@ const Scene: React.FC = () => {
               color="blue"
               lineWidth={2}
             />
-            <DotProductVisualizer />
+            <PlaneProvider>
+              <DotProductVisualizer setControlsDisabled={setControlsDisabled} />
+            </PlaneProvider>
           </Canvas>
         </VisualizationContainer>
 
         <VisualizationContainer>
           <Canvas>
             <PerspectiveCamera makeDefault position={[5, 5, 5]} />
-            <OrbitControls />
+            <OrbitControls enabled={!controlsDisabled} />
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 5]} intensity={1} />
 
@@ -81,7 +86,11 @@ const Scene: React.FC = () => {
               color="blue"
               lineWidth={2}
             />
-            <CrossProductVisualizer />
+            <PlaneProvider>
+              <CrossProductVisualizer
+                setControlsDisabled={setControlsDisabled}
+              />
+            </PlaneProvider>
           </Canvas>
         </VisualizationContainer>
       </SceneWrapper>

@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
+
+interface IVisualizerProps {
+  setControlsDisabled: (disabled: boolean) => void;
+}
 
 const formatNumber = (num: number) =>
   num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
 
-const DotProductVisualizer: React.FC = () => {
+const DotProductVisualizer: FC<IVisualizerProps> = ({
+  setControlsDisabled,
+}) => {
   const vecA = new THREE.Vector3(1, 2, 3);
   const vecB = new THREE.Vector3(4, 5, 6);
 
@@ -21,6 +27,7 @@ const DotProductVisualizer: React.FC = () => {
         additionalInfo={`${formatNumber(vecA.x)}, ${formatNumber(
           vecA.y
         )}, ${formatNumber(vecA.z)}`}
+        setControlsDisabled={setControlsDisabled}
       />
       <Vector
         vector={vecB}
@@ -29,6 +36,7 @@ const DotProductVisualizer: React.FC = () => {
         additionalInfo={`${formatNumber(vecB.x)}, ${formatNumber(
           vecB.y
         )}, ${formatNumber(vecB.z)}`}
+        setControlsDisabled={setControlsDisabled}
       />
     </>
   );
