@@ -38,7 +38,7 @@ const DotProductVisualizer: React.FC<{
           setVecA(newVec);
           updateDotProduct();
         }}
-        isDraggingEnabled={true}
+        isDraggingEnabled
         setControlsDisabled={setControlsDisabled}
       />
       <Vector
@@ -52,7 +52,7 @@ const DotProductVisualizer: React.FC<{
           setVecB(newVec);
           updateDotProduct();
         }}
-        isDraggingEnabled={true}
+        isDraggingEnabled
         setControlsDisabled={setControlsDisabled}
       />
       {/* Line representing the projection of B onto A */}
