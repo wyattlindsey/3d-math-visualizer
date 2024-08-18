@@ -1,21 +1,19 @@
-import React, { FC } from 'react';
+import React, { useState } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
 
-interface IVisualizerProps {
-  setControlsDisabled: (disabled: boolean) => void;
-}
+const CrossProductVisualizer: React.FC<{
+  setControlsDisabled: (isEnabled: boolean) => void;
+}> = ({ setControlsDisabled }) => {
+  const [vecA, setVecA] = useState(new THREE.Vector3(1, 2, 0));
+  const [vecB, setVecB] = useState(new THREE.Vector3(0, 1, 1));
+  const [crossProduct, setCrossProduct] = useState(
+    new THREE.Vector3().crossVectors(vecA, vecB)
+  );
 
-const formatNumber = (num: number) =>
-  num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
-
-const CrossProductVisualizer: FC<IVisualizerProps> = ({
-  setControlsDisabled,
-}) => {
-  const vecA = new THREE.Vector3(1, 2, 0);
-  const vecB = new THREE.Vector3(0, 1, 1);
-
-  const crossProduct = new THREE.Vector3().crossVectors(vecA, vecB);
+  const updateCrossProduct = () => {
+    setCrossProduct(new THREE.Vector3().crossVectors(vecA, vecB));
+  };
 
   return (
     <>
@@ -23,26 +21,39 @@ const CrossProductVisualizer: FC<IVisualizerProps> = ({
         vector={vecA}
         color="orange"
         label="Vector A"
-        additionalInfo={`${formatNumber(vecA.x)}, ${formatNumber(
-          vecA.y
-        )}, ${formatNumber(vecA.z)}`}
+        additionalInfo={`${vecA.x.toFixed(2)}, ${vecA.y.toFixed(
+          2
+        )}, ${vecA.z.toFixed(2)}`}
+        onDrag={newVec => {
+          setVecA(newVec);
+          updateCrossProduct();
+        }}
+        isDraggingEnabled={true}
         setControlsDisabled={setControlsDisabled}
       />
       <Vector
         vector={vecB}
         color="purple"
         label="Vector B"
-        additionalInfo={`${formatNumber(vecB.x)}, ${formatNumber(
-          vecB.y
-        )}, ${formatNumber(vecB.z)}`}
+        additionalInfo={`${vecB.x.toFixed(2)}, ${vecB.y.toFixed(
+          2
+        )}, ${vecB.z.toFixed(2)}`}
+        onDrag={newVec => {
+          setVecB(newVec);
+          updateCrossProduct();
+        }}
+        isDraggingEnabled={true}
+        setControlsDisabled={setControlsDisabled}
       />
       <Vector
         vector={crossProduct}
         color="cyan"
         label="Cross Product"
-        additionalInfo={`${formatNumber(crossProduct.x)}, ${formatNumber(
-          crossProduct.y
-        )}, ${formatNumber(crossProduct.z)}`}
+        additionalInfo={`${crossProduct.x.toFixed(2)}, ${crossProduct.y.toFixed(
+          2
+        )}, ${crossProduct.z.toFixed(2)}`}
+        onDrag={() => {}}
+        isDraggingEnabled={false}
         setControlsDisabled={setControlsDisabled}
       />
     </>

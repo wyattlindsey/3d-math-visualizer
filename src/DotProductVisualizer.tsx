@@ -1,22 +1,29 @@
-import React, { FC } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
+import { Line, Text } from '@react-three/drei';
 
-interface IVisualizerProps {
-  setControlsDisabled: (disabled: boolean) => void;
-}
+const DotProductVisualizer: React.FC<{
+  setControlsDisabled: (isEnabled: boolean) => void;
+}> = ({ setControlsDisabled }) => {
+  const [vecA, setVecA] = useState(new THREE.Vector3(1, 2, 3));
+  const [vecB, setVecB] = useState(new THREE.Vector3(4, 5, 6));
+  const [projection, setProjection] = useState(new THREE.Vector3());
+  const [dotProduct, setDotProduct] = useState(vecA.dot(vecB));
 
-const formatNumber = (num: number) =>
-  num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+  const updateDotProduct = () => {
+    const dot = vecA.dot(vecB);
+    setDotProduct(dot);
 
-const DotProductVisualizer: FC<IVisualizerProps> = ({
-  setControlsDisabled,
-}) => {
-  const vecA = new THREE.Vector3(1, 2, 3);
-  const vecB = new THREE.Vector3(4, 5, 6);
+    // Calculate the projection of B onto A
+    const projectionVector = vecA.clone().multiplyScalar(dot / vecA.lengthSq());
 
-  // Calculate midpoint between vecA and vecB for placing the dot product label
-  const midpoint = vecA.clone().add(vecB).multiplyScalar(0.5);
+    setProjection(projectionVector);
+  };
+
+  useEffect(() => {
+    updateDotProduct();
+  }, [vecA, vecB]);
 
   return (
     <>
@@ -24,20 +31,45 @@ const DotProductVisualizer: FC<IVisualizerProps> = ({
         vector={vecA}
         color="orange"
         label="Vector A"
-        additionalInfo={`${formatNumber(vecA.x)}, ${formatNumber(
-          vecA.y
-        )}, ${formatNumber(vecA.z)}`}
+        additionalInfo={`${vecA.x.toFixed(2)}, ${vecA.y.toFixed(
+          2
+        )}, ${vecA.z.toFixed(2)}`}
+        onDrag={newVec => {
+          setVecA(newVec);
+          updateDotProduct();
+        }}
+        isDraggingEnabled={true}
         setControlsDisabled={setControlsDisabled}
       />
       <Vector
         vector={vecB}
         color="purple"
         label="Vector B"
-        additionalInfo={`${formatNumber(vecB.x)}, ${formatNumber(
-          vecB.y
-        )}, ${formatNumber(vecB.z)}`}
+        additionalInfo={`${vecB.x.toFixed(2)}, ${vecB.y.toFixed(
+          2
+        )}, ${vecB.z.toFixed(2)}`}
+        onDrag={newVec => {
+          setVecB(newVec);
+          updateDotProduct();
+        }}
+        isDraggingEnabled={true}
         setControlsDisabled={setControlsDisabled}
       />
+      {/* Line representing the projection of B onto A */}
+      <Line
+        points={[[0, 0, 0], projection.toArray() as [number, number, number]]}
+        color="cyan"
+        lineWidth={2}
+      />
+      <Text
+        position={projection.clone().multiplyScalar(1.1).toArray()} // Position the text slightly beyond the end of the projection line
+        color="white"
+        fontSize={0.5}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Dot Product: {dotProduct.toFixed(2)}
+      </Text>
     </>
   );
 };
