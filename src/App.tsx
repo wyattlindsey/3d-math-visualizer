@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Scene from './Scene'; // Assuming Scene.tsx contains your 3D visualization
 import Equations from './Equations'; // Component for equations
+import { GlobalProvider } from './GlobalContext';
 
 const AppContainer = styled.div`
   display: flex;
@@ -52,12 +53,14 @@ const EquationsSection = styled.div`
 const App: React.FC = () => {
   return (
     <AppContainer>
-      <VisualizationSection>
-        <Scene />
-      </VisualizationSection>
-      <EquationsSection>
-        <Equations />
-      </EquationsSection>
+      <GlobalProvider>
+        <VisualizationSection>
+          <Scene />
+        </VisualizationSection>
+        <EquationsSection>
+          <Equations />
+        </EquationsSection>
+      </GlobalProvider>
     </AppContainer>
   );
 };

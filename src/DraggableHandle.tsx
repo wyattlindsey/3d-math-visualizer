@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGesture } from '@use-gesture/react';
@@ -9,7 +9,6 @@ interface VectorProps {
   color: string;
   onDrag: (newVector: THREE.Vector3) => void;
   setControlsDisabled: (disabled: boolean) => void;
-  isDraggingEnabled?: boolean;
 }
 
 const DraggableHandle: React.FC<VectorProps> = ({
@@ -17,49 +16,39 @@ const DraggableHandle: React.FC<VectorProps> = ({
   color,
   onDrag,
   setControlsDisabled,
-  isDraggingEnabled = true,
 }) => {
   const { raycaster } = useThree();
   const planeContext = useContext(PlaneContext);
   const handleRef = useRef<THREE.Mesh>(null);
 
-  const bind = useGesture(
-    {
-      onDrag: ({ event, memo }) => {
-        event.stopPropagation();
-        if (
-          !isDraggingEnabled ||
-          !planeContext ||
-          !planeContext.planeRef ||
-          !handleRef.current
-        )
-          return;
+  const bind = useGesture({
+    onDrag: ({ event, memo }) => {
+      event.stopPropagation();
+      if (!planeContext || !planeContext.planeRef || !handleRef.current) return;
 
-        if (!memo) {
-          // Set the plane at the intersection point
-          planeContext.setPlaneAtIntersection(raycaster);
-          memo = true;
-        }
+      if (!memo) {
+        // Set the plane at the intersection point
+        planeContext.setPlaneAtIntersection(raycaster);
+        memo = true;
+      }
 
-        const intersects = raycaster.intersectObject(
-          planeContext.planeRef.current!
-        );
-        if (intersects.length > 0) {
-          const intersectionPoint = intersects[0].point;
-          handleRef.current.position.copy(intersectionPoint);
-          onDrag(intersectionPoint.clone());
-        }
+      const intersects = raycaster.intersectObject(
+        planeContext.planeRef.current!
+      );
+      if (intersects.length > 0) {
+        const intersectionPoint = intersects[0].point;
+        handleRef.current.position.copy(intersectionPoint);
+        onDrag(intersectionPoint.clone());
+      }
 
-        setControlsDisabled(true);
+      setControlsDisabled(true);
 
-        return memo;
-      },
-      onDragEnd: () => {
-        setControlsDisabled(false);
-      },
+      return memo;
     },
-    { enabled: isDraggingEnabled }
-  );
+    onDragEnd: () => {
+      setControlsDisabled(false);
+    },
+  });
 
   return (
     //@ts-ignore

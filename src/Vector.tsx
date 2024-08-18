@@ -28,10 +28,11 @@ const Vector: React.FC<VectorProps> = ({
 
   const handleDrag = useCallback(
     (newPosition: THREE.Vector3) => {
+      if (!isDraggingEnabled) return;
       vector.copy(newPosition);
       onDrag(newPosition);
     },
-    [vector, onDrag]
+    [vector, onDrag, isDraggingEnabled]
   );
 
   // Update only when vector changes
@@ -57,12 +58,14 @@ const Vector: React.FC<VectorProps> = ({
         color={color}
         lineWidth={2}
       />
-      <DraggableHandle
-        vector={vector}
-        color={color}
-        onDrag={handleDrag}
-        setControlsDisabled={setControlsDisabled}
-      />
+      {isDraggingEnabled && (
+        <DraggableHandle
+          vector={vector}
+          color={color}
+          onDrag={handleDrag}
+          setControlsDisabled={setControlsDisabled}
+        />
+      )}
     </>
   );
 };

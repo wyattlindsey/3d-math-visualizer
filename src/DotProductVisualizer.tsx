@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
 import { Line, Text } from '@react-three/drei';
+import { GlobalContext } from './GlobalContext';
 
 const DotProductVisualizer: React.FC<{
   setControlsDisabled: (isEnabled: boolean) => void;
@@ -9,7 +10,7 @@ const DotProductVisualizer: React.FC<{
   const [vecA, setVecA] = useState(new THREE.Vector3(1, 2, 3));
   const [vecB, setVecB] = useState(new THREE.Vector3(4, 5, 6));
   const [projection, setProjection] = useState(new THREE.Vector3());
-  const [dotProduct, setDotProduct] = useState(vecA.dot(vecB));
+  const global = useContext(GlobalContext);
 
   const updateDotProduct = () => {
     const dot = vecA.dot(vecB);
@@ -23,7 +24,12 @@ const DotProductVisualizer: React.FC<{
 
   useEffect(() => {
     updateDotProduct();
+    setDotVecA(vecA);
+    setDotVecB(vecB);
   }, [vecA, vecB]);
+
+  if (!global) return null;
+  const { setDotVecA, setDotVecB, setDotProduct, dotProduct } = global;
 
   return (
     <>
@@ -61,7 +67,7 @@ const DotProductVisualizer: React.FC<{
         color="cyan"
         lineWidth={2}
       />
-      <Text
+      {/* <Text
         position={projection.clone().multiplyScalar(1.1).toArray()} // Position the text slightly beyond the end of the projection line
         color="white"
         fontSize={0.5}
@@ -69,7 +75,7 @@ const DotProductVisualizer: React.FC<{
         anchorY="middle"
       >
         Dot Product: {dotProduct.toFixed(2)}
-      </Text>
+      </Text> */}
     </>
   );
 };

@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
+import { GlobalContext } from './GlobalContext';
 
 const CrossProductVisualizer: React.FC<{
   setControlsDisabled: (isEnabled: boolean) => void;
 }> = ({ setControlsDisabled }) => {
-  const [vecA, setVecA] = useState(new THREE.Vector3(1, 2, 0));
-  const [vecB, setVecB] = useState(new THREE.Vector3(0, 1, 1));
-  const [crossProduct, setCrossProduct] = useState(
-    new THREE.Vector3().crossVectors(vecA, vecB)
-  );
+  const global = useContext(GlobalContext);
 
   const updateCrossProduct = () => {
     setCrossProduct(new THREE.Vector3().crossVectors(vecA, vecB));
   };
+
+  if (!global) return null;
+  const {
+    crossVecA: vecA,
+    crossVecB: vecB,
+    setCrossVecA: setVecA,
+    setCrossVecB: setVecB,
+    crossProduct,
+    setCrossProduct,
+  } = global;
 
   return (
     <>

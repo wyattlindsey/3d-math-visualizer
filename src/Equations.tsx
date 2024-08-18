@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { GlobalContext } from './GlobalContext';
 
 const EquationContainer = styled.div`
   display: flex;
@@ -24,16 +25,18 @@ const formatNumber = (num: number) =>
   num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
 
 const Equations: React.FC = () => {
-  // Example vectors
-  const vecA = { x: 1, y: 2, z: 3 };
-  const vecB = { x: 4, y: 5, z: 6 };
+  const global = useContext(GlobalContext);
+  if (!global) return null;
 
-  const dotProduct = vecA.x * vecB.x + vecA.y * vecB.y + vecA.z * vecB.z;
+  const { dotVecA, dotVecB, crossVecA, crossVecB } = global;
+
+  const dotProduct =
+    dotVecA.x * dotVecB.x + dotVecA.y * dotVecB.y + dotVecA.z * dotVecB.z;
 
   const crossProduct = {
-    x: vecA.y * vecB.z - vecA.z * vecB.y,
-    y: vecA.z * vecB.x - vecA.x * vecB.z,
-    z: vecA.x * vecB.y - vecA.y * vecB.x,
+    x: crossVecA.y * crossVecB.z - crossVecA.z * crossVecB.y,
+    y: crossVecA.z * crossVecB.x - crossVecA.x * crossVecB.z,
+    z: crossVecA.x * crossVecB.y - crossVecA.y * crossVecB.x,
   };
 
   return (
@@ -56,17 +59,17 @@ const Equations: React.FC = () => {
           <ColorText color="black">{dotProduct}</ColorText>
         </EquationRow>
         <EquationRow>
-          <ColorText color="orange">{formatNumber(vecA.x)}</ColorText>
+          <ColorText color="orange">{formatNumber(dotVecA.x)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.x)}</ColorText>
+          <ColorText color="purple">{formatNumber(dotVecB.x)}</ColorText>
           <span>+</span>
-          <ColorText color="orange">{formatNumber(vecA.y)}</ColorText>
+          <ColorText color="orange">{formatNumber(dotVecA.y)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.y)}</ColorText>
+          <ColorText color="purple">{formatNumber(dotVecB.y)}</ColorText>
           <span>+</span>
-          <ColorText color="orange">{formatNumber(vecA.z)}</ColorText>
+          <ColorText color="orange">{formatNumber(dotVecA.z)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.z)}</ColorText>
+          <ColorText color="purple">{formatNumber(dotVecB.z)}</ColorText>
           <span>=</span>
           <ColorText color="black">{dotProduct}</ColorText>
         </EquationRow>
@@ -108,29 +111,29 @@ const Equations: React.FC = () => {
           <span>)</span>
         </EquationRow>
         <EquationRow>
-          <ColorText color="orange">{formatNumber(vecA.y)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.y)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.z)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.z)}</ColorText>
           <span>-</span>
-          <ColorText color="orange">{formatNumber(vecA.z)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.z)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.y)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.y)}</ColorText>
           <span>,</span>
-          <ColorText color="orange">{formatNumber(vecA.z)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.z)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.x)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.x)}</ColorText>
           <span>-</span>
-          <ColorText color="orange">{formatNumber(vecA.x)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.x)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.z)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.z)}</ColorText>
           <span>,</span>
-          <ColorText color="orange">{formatNumber(vecA.x)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.x)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.y)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.y)}</ColorText>
           <span>-</span>
-          <ColorText color="orange">{formatNumber(vecA.y)}</ColorText>
+          <ColorText color="orange">{formatNumber(crossVecA.y)}</ColorText>
           <span>*</span>
-          <ColorText color="purple">{formatNumber(vecB.x)}</ColorText>
+          <ColorText color="purple">{formatNumber(crossVecB.x)}</ColorText>
           <span>=</span>
           <span>(</span>
           <ColorText color="cyan">{crossProduct.x}</ColorText>
