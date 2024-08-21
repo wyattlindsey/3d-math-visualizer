@@ -54,7 +54,7 @@ const DraggableHandle: React.FC<VectorProps> = ({
     return (
         //@ts-ignore
         <mesh {...bind()} ref={handleRef} position={vector.toArray()}>
-            <boxGeometry args={[0.2, 0.2, 0.2]} />
+            <sphereGeometry args={[0.14, 32]} />
             <meshBasicMaterial color={color} />
         </mesh>
     );
