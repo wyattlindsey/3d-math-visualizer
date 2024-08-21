@@ -10,7 +10,6 @@ import {
 } from './AppContainer';
 import { PlaneProvider } from './PlaneContext';
 import { DimensionMode, GlobalContext, ViewMode } from './GlobalContext';
-import { styled } from 'styled-components';
 import DotProduct2DVisualizer from './DotProductVisualizer2D';
 import CrossProduct2DVisualizer from './CrossProductVisualizer2D';
 

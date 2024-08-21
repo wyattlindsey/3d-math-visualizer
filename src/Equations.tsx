@@ -2,39 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { GlobalContext, ViewMode } from './GlobalContext';
 
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-`;
-
-const EquationContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-`;
-
-const EquationRow = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 5px;
-    font-size: 1.2em;
-`;
-
-const ColorText = styled.span<{ color: string }>`
-    color: ${props => props.color};
-    margin: 0 5px;
-    font-weight: bold;
-`;
-
-const Answer = styled.span`
-    color: black;
-    margin-left: 5px;
-    font-weight: bold;
-`;
-
 const formatNumber = (num: number) =>
     num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
 
@@ -208,5 +175,38 @@ const Equations: React.FC = () => {
         </Container>
     );
 };
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+`;
+
+const EquationContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+`;
+
+const EquationRow = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 1.2em;
+`;
+
+const ColorText = styled.span<{ color: string }>`
+    color: ${props => props.color};
+    margin: 0 5px;
+    font-weight: bold;
+`;
+
+const Answer = styled.span`
+    color: black;
+    margin-left: 5px;
+    font-weight: bold;
+`;
 
 export default Equations;

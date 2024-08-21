@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
 import { Line } from '@react-three/drei';
-import { DimensionMode, GlobalContext } from './GlobalContext';
-import DotProduct2DVisualizer from './DotProductVisualizer2D';
+import { GlobalContext } from './GlobalContext';
 
 const DotProductVisualizer: React.FC<{
     setControlsDisabled: (isEnabled: boolean) => void;
@@ -13,9 +12,9 @@ const DotProductVisualizer: React.FC<{
     const [projection, setProjection] = useState(new THREE.Vector3());
     const global = useContext(GlobalContext);
 
-    const updateDotProduct = () => {
+    const updateDotProduct = useCallback(() => {
         const dot = vecA.dot(vecB);
-        setDotProduct(dot);
+        global?.setDotProduct(dot);
 
         // Calculate the projection of B onto A
         const projectionVector = vecA
@@ -23,16 +22,15 @@ const DotProductVisualizer: React.FC<{
             .multiplyScalar(dot / vecA.lengthSq());
 
         setProjection(projectionVector);
-    };
+    }, [global, setProjection, vecA, vecB]);
 
     useEffect(() => {
         updateDotProduct();
-        setDotVecA(vecA);
-        setDotVecB(vecB);
-    }, [vecA, vecB]);
+        global?.setDotVecA(vecA);
+        global?.setDotVecB(vecB);
+    }, [global, vecA, vecB, updateDotProduct]);
 
     if (!global) return null;
-    const { setDotVecA, setDotVecB, setDotProduct } = global;
 
     return (
         <>
@@ -73,15 +71,6 @@ const DotProductVisualizer: React.FC<{
                 color="cyan"
                 lineWidth={2}
             />
-            {/* <Text
-        position={projection.clone().multiplyScalar(1.1).toArray()} // Position the text slightly beyond the end of the projection line
-        color="white"
-        fontSize={0.5}
-        anchorX="center"
-        anchorY="middle"
-      >
-        Dot Product: {dotProduct.toFixed(2)}
-      </Text> */}
         </>
     );
 };

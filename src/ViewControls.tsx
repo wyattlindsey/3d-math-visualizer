@@ -11,16 +11,18 @@ const ViewControls = () => {
 
     return (
         <Container>
-            {dimensionMode === DimensionMode['3D'] && (
-                <Instructions>
+            <Instructions>
+                <Paragraph>
+                    Drag the handles to see the effect of moving a vector
+                </Paragraph>
+                {dimensionMode === DimensionMode['3D'] && (
                     <Paragraph>Click and drag to rotate the view.</Paragraph>
+                )}
+                {dimensionMode === DimensionMode['3D'] && (
                     <Paragraph>Scroll to zoom in and out.</Paragraph>
-                    <Paragraph>
-                        Drag the square handles to see the effect of moving a
-                        vector
-                    </Paragraph>
-                </Instructions>
-            )}
+                )}
+            </Instructions>
+
             <ControlsWrapper>
                 <DimensionSwitch>
                     <input

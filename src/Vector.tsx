@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Line } from '@react-three/drei';
 import DraggableHandle from './DraggableHandle';

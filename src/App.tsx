@@ -5,6 +5,22 @@ import Equations from './Equations'; // Component for equations
 import { GlobalProvider } from './GlobalContext';
 import ViewControls from './ViewControls';
 
+const App: React.FC = () => {
+    return (
+        <AppContainer>
+            <GlobalProvider>
+                <ViewControls />
+                <VisualizationSection>
+                    <Scene />
+                </VisualizationSection>
+                <EquationsSection>
+                    <Equations />
+                </EquationsSection>
+            </GlobalProvider>
+        </AppContainer>
+    );
+};
+
 const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -47,21 +63,5 @@ const EquationsSection = styled.div`
         height: 30vh; /* Reduce height to give more room to the visualizer */
     }
 `;
-
-const App: React.FC = () => {
-    return (
-        <AppContainer>
-            <GlobalProvider>
-                <ViewControls />
-                <VisualizationSection>
-                    <Scene />
-                </VisualizationSection>
-                <EquationsSection>
-                    <Equations />
-                </EquationsSection>
-            </GlobalProvider>
-        </AppContainer>
-    );
-};
 
 export default App;

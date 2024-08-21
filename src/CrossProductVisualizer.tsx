@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
-import { DimensionMode, GlobalContext } from './GlobalContext';
-import CrossProduct2DVisualizer from './CrossProductVisualizer2D';
+import { GlobalContext } from './GlobalContext';
 
 const CrossProductVisualizer: React.FC<{
     setControlsDisabled: (isEnabled: boolean) => void;
