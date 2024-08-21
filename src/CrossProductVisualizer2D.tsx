@@ -62,7 +62,7 @@ const CrossProduct2DVisualizer = () => {
             <Text
                 position={new THREE.Vector3(0, -1, 0)}
                 fontSize={0.5}
-                color="black"
+                color="white"
                 anchorX="center"
                 anchorY="middle"
             >
