@@ -62,15 +62,6 @@ const DotProductVisualizer: React.FC<{
                 isDraggingEnabled
                 setControlsDisabled={setControlsDisabled}
             />
-            {/* Line representing the projection of B onto A */}
-            <Line
-                points={[
-                    [0, 0, 0],
-                    projection.toArray() as [number, number, number],
-                ]}
-                color="cyan"
-                lineWidth={2}
-            />
         </>
     );
 };
