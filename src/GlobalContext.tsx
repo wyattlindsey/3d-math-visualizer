@@ -6,6 +6,11 @@ export enum ViewMode {
     CrossProduct,
 }
 
+export enum DimensionMode {
+    '2D',
+    '3D',
+}
+
 interface GlobalContextType {
     /* vectors */
     dotVecA: THREE.Vector3;
@@ -24,6 +29,8 @@ interface GlobalContextType {
     /* app state */
     viewMode: ViewMode;
     setViewMode: (viewMode: ViewMode) => void;
+    dimensionMode: DimensionMode;
+    setDimensionMode: (dimensionMode: DimensionMode) => void;
 }
 
 // Create the context with the correct type
@@ -46,6 +53,7 @@ export const GlobalProvider: React.FC<React.PropsWithChildren<{}>> = ({
         new THREE.Vector3().crossVectors(cVecA, cVecB)
     );
     const [viewMode, setViewMode] = useState(ViewMode.DotProduct);
+    const [dimensionMode, setDimensionMode] = useState(DimensionMode['3D']);
 
     const value = {
         dotVecA,
@@ -62,6 +70,9 @@ export const GlobalProvider: React.FC<React.PropsWithChildren<{}>> = ({
         setCrossProduct: (v: THREE.Vector3) => setCrossProduct(v),
         viewMode,
         setViewMode: (viewMode: ViewMode) => setViewMode(viewMode),
+        dimensionMode,
+        setDimensionMode: (dimensionMode: DimensionMode) =>
+            setDimensionMode(dimensionMode),
     };
 
     return (

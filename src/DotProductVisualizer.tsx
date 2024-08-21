@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
-import { Line, Text } from '@react-three/drei';
-import { GlobalContext } from './GlobalContext';
+import { Line } from '@react-three/drei';
+import { DimensionMode, GlobalContext } from './GlobalContext';
 
 const DotProductVisualizer: React.FC<{
     setControlsDisabled: (isEnabled: boolean) => void;
@@ -31,7 +31,11 @@ const DotProductVisualizer: React.FC<{
     }, [vecA, vecB]);
 
     if (!global) return null;
-    const { setDotVecA, setDotVecB, setDotProduct, dotProduct } = global;
+    const { setDotVecA, setDotVecB, setDotProduct, dimensionMode } = global;
+
+    if (dimensionMode === DimensionMode['2D']) {
+        return null;
+    }
 
     return (
         <>
