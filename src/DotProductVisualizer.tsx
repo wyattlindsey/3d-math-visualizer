@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import Vector from './Vector';
 import { Line } from '@react-three/drei';
 import { DimensionMode, GlobalContext } from './GlobalContext';
+import DotProduct2DVisualizer from './DotProductVisualizer2D';
 
 const DotProductVisualizer: React.FC<{
     setControlsDisabled: (isEnabled: boolean) => void;
@@ -31,11 +32,7 @@ const DotProductVisualizer: React.FC<{
     }, [vecA, vecB]);
 
     if (!global) return null;
-    const { setDotVecA, setDotVecB, setDotProduct, dimensionMode } = global;
-
-    if (dimensionMode === DimensionMode['2D']) {
-        return null;
-    }
+    const { setDotVecA, setDotVecB, setDotProduct } = global;
 
     return (
         <>

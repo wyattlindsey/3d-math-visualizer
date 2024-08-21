@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import Vector from './Vector';
 import { DimensionMode, GlobalContext } from './GlobalContext';
+import CrossProduct2DVisualizer from './CrossProductVisualizer2D';
 
 const CrossProductVisualizer: React.FC<{
     setControlsDisabled: (isEnabled: boolean) => void;
@@ -20,12 +21,7 @@ const CrossProductVisualizer: React.FC<{
         setCrossVecB: setVecB,
         crossProduct,
         setCrossProduct,
-        dimensionMode,
     } = global;
-
-    if (dimensionMode === DimensionMode['2D']) {
-        return null;
-    }
 
     return (
         <>
