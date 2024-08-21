@@ -1,16 +1,25 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrthographicCamera, Line, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import DraggableHandle2D from './DraggableHandle2D';
+import { GlobalContext } from './GlobalContext';
 
 const DotProduct2DVisualizer = () => {
     const [vecA, setVecA] = useState(new THREE.Vector2(1, 2));
     const [vecB, setVecB] = useState(new THREE.Vector2(3, 1));
 
+    const global = useContext(GlobalContext);
+
     const dotProduct = useMemo(() => {
         return vecA.dot(vecB);
     }, [vecA, vecB]);
+
+    useEffect(() => {
+        global?.setDotVecA2D(vecA);
+        global?.setDotVecB2D(vecB);
+        global?.setDotProduct2D(dotProduct);
+    }, [global, dotProduct, vecA, vecB]);
 
     const projection = useMemo(() => {
         const bLengthSquared = vecB.lengthSq();
