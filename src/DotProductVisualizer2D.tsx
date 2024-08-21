@@ -12,6 +12,13 @@ const DotProduct2DVisualizer = () => {
         return vecA.dot(vecB);
     }, [vecA, vecB]);
 
+    const projection = useMemo(() => {
+        const bLengthSquared = vecB.lengthSq();
+        if (bLengthSquared === 0) return new THREE.Vector2(0, 0);
+        const scalar = vecA.dot(vecB) / bLengthSquared;
+        return vecB.clone().multiplyScalar(scalar);
+    }, [vecA, vecB]);
+
     const handleDrag = (
         event: { point: { x: any; y: any } },
         setVector: {
@@ -28,6 +35,7 @@ const DotProduct2DVisualizer = () => {
         <Canvas>
             <OrthographicCamera makeDefault position={[0, 0, 10]} zoom={100} />
             <gridHelper args={[10, 10, `gray`, `gray`]} />
+            {/* Vector A */}
             <Line
                 points={[
                     [0, 0],
@@ -36,13 +44,24 @@ const DotProduct2DVisualizer = () => {
                 color="orange"
                 lineWidth={2}
             />
+            {/* Vector B from projection point to endpoint */}
             <Line
                 points={[
-                    [0, 0],
+                    [projection.x, projection.y],
                     [vecB.x, vecB.y],
                 ]}
                 color="purple"
                 lineWidth={2}
+            />
+            {/* Projection of A onto B (overlapping segment) */}
+            <Line
+                points={[
+                    [0, 0],
+                    [projection.x, projection.y],
+                ]}
+                color="cyan"
+                lineWidth={2}
+                dashed={false}
             />
             <DraggableHandle2D
                 position={new THREE.Vector3(vecA.x, vecA.y, 0)}
