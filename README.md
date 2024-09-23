@@ -1,4 +1,4 @@
-Try it out at http://3d-math-visualizer.s3-website.us-east-2.amazonaws.com/
+### Try it out at http://3d-math-visualizer.s3-website.us-east-2.amazonaws.com/
 
 <img width="859" alt="Screenshot 2024-09-23 at 5 50 51 AM" src="https://github.com/user-attachments/assets/8c415317-a78d-4321-9392-21ea4e33421c">
 <img width="859" alt="Screenshot 2024-09-23 at 5 50 45 AM" src="https://github.com/user-attachments/assets/1a7bbfa0-f1c2-4e7e-b64a-64085fc465e5">
