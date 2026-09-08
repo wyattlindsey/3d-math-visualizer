@@ -5,7 +5,7 @@ export const AppContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     background-color: #1e1e1e; /* Dark background */
     color: #e0e0e0; /* Light text color */
@@ -23,7 +23,8 @@ export const SceneWrapper = styled.div`
 export const VisualizationContainer = styled.div`
     flex: 1 1 45%;
     min-width: 300px;
-    height: 400px;
+    min-height: 300px;
+    align-self: stretch;
     background: #2e2e2e; /* Darker container background */
     margin: 20px;
     border-radius: 10px;
