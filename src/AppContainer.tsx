@@ -26,7 +26,7 @@ export const VisualizationContainer = styled.div`
     min-height: 300px;
     align-self: stretch;
     background: #2e2e2e; /* Darker container background */
-    margin: 20px;
+    margin: 12px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Darker shadow */
     padding: 10px;

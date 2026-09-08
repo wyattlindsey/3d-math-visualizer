@@ -73,15 +73,14 @@ const Container = styled.div`
     background-color: #f5f5f5;
     color: #333;
     font-family: Arial, sans-serif;
-    font-size: 1.2em;
-    padding: 20px;
+    font-size: 1em;
+    padding: 12px 16px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+    margin: 12px;
 `;
 
 const Instructions = styled.div`
-    margin-bottom: 20px;
     width: 100%;
 `;
 
@@ -107,9 +106,9 @@ const VisualizerSwitch = styled.div`
     label {
         background-color: #e0e0e0;
         color: #333;
-        padding: 10px 20px;
+        padding: 6px 16px;
         border-radius: 5px;
-        margin: 5px;
+        margin: 4px;
         cursor: pointer;
         width: 100%;
         box-sizing: border-box;

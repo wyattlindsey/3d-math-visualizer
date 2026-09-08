@@ -49,7 +49,7 @@ const VisualizationSection = styled.div`
 `;
 
 const EquationsSection = styled.div`
-    padding: 20px;
+    padding: 12px 20px;
     background-color: #f5f5f5;
     color: #333;
     font-family: Arial, sans-serif;
