@@ -112,6 +112,7 @@ const VisualizerSwitch = styled.div`
         margin: 5px;
         cursor: pointer;
         width: 100%;
+        box-sizing: border-box;
         text-align: center;
     }
 
